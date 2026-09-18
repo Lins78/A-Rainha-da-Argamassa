@@ -1,0 +1,15 @@
+1-Criando o banco de dados:
+
+CREATE DATABASE revenda_argamassa;
+
+2-Configure usuário/senha no config.py
+
+3- Dependências:
+
+pip install -r requirements.txt
+
+4- Rodar o app:
+
+python app.py
+
+

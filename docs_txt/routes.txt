@@ -1,0 +1,29 @@
+from flask import Blueprint, request, jsonify
+from models import db, Produto, Cliente, Pedido
+
+bp = Blueprint("main", __name__)
+
+@bp.route("/produtos", methods=["POST"])
+def add_produto():
+    data = request.json
+    produto = Produto(nome=data["nome"], preco=data["preco"], estoque=data["estoque"])
+    db.session.add(produto)
+    db.session.commit()
+    return jsonify({"msg": "Produto cadastrado com sucesso!"})
+
+@bp.route("/venda", methods=["POST"])
+def registrar_venda():
+    data = request.json
+    cliente = Cliente.query.get(data["cliente_id"])
+    produto = Produto.query.get(data["produto_id"])
+    quantidade = data["quantidade"]
+
+    if produto.estoque >= quantidade:
+        produto.estoque -= quantidade
+        pedido = Pedido(cliente=cliente, produto=produto,
+                        quantidade=quantidade, total=produto.preco * quantidade)
+        db.session.add(pedido)
+        db.session.commit()
+        return jsonify({"msg": "Venda registrada!", "total": pedido.total})
+    else:
+        return jsonify({"msg": "Estoque insuficiente!"}), 400

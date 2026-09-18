@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A Rainha da Argamassa</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <div class="brand">
+          <div class="logo">A</div>
+          <div>
+            <h1>A Rainha da Argamassa</h1>
+          </div>
+        </div>
+        <div class="tag">Simulador do cliente</div>
+      </header>
+
+      <main class="grid">
+        <section class="panel">
+          <h2>Operações do cliente</h2>
+
+          <div class="section">
+            <div class="row">
+              <div>
+                <label for="tipoOperacao">Tipo da operação</label>
+                <select id="tipoOperacao">
+                  <option value="produto">Cadastrar produto</option>
+                  <option value="entrada_estoque">Registrar entrada de estoque</option>
+                  <option value="fornecedor">Cadastrar fornecedor</option>
+                  <option value="inventario">Consultar inventário</option>
+                  <option value="cliente">Cadastrar cliente</option>
+                  <option value="conta_bancaria">Cadastrar conta bancária</option>
+                  <option value="venda">Registrar venda</option>
+                  <option value="pedido">Criar pedido</option>
+                  <option value="efetivar">Efetivar pedido</option>
+                  <option value="cancelar">Cancelar pedido</option>
+                  <option value="soma">Soma</option>
+                  <option value="subtracao">Subtração</option>
+                  <option value="multiplicacao">Multiplicação</option>
+                  <option value="divisao">Divisão</option>
+                  <option value="desconto">Desconto</option>
+                  <option value="margem">Margem de lucro</option>
+                  <option value="media">Média de preços</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <script>
+            window.API_KEY = "{{ api_key }}";
+          </script>
+
+          <div class="section stack" id="formContainer"></div>
+
+          <div style="display:flex; gap:12px; margin-top:8px;">
+            <button id="submitBtn">Executar operação</button>
+            <button id="resetBtn" class="secondary">Limpar</button>
+          </div>
+
+          <div class="result" id="resultado">Resultado aparecerá aqui.</div>
+        </section>
+
+        <aside class="panel">
+          <h2>Resumo</h2>
+          <p class="muted">Use esta área para simular como um cliente realiza as operações cadastradas pela empresa.</p>
+
+          <div class="stack">
+            <div>
+              <span class="status">Disponível</span>
+            </div>
+            <div>
+              <strong>Produtos</strong><br />
+              <span class="muted">Cadastro, preço e estoque.</span>
+            </div>
+            <div>
+              <strong>Clientes</strong><br />
+              <span class="muted">Nome e telefone.</span>
+            </div>
+            <div>
+              <strong>Vendas</strong><br />
+              <span class="muted">Registrar, efetivar e cancelar pedidos.</span>
+            </div>
+            <div>
+              <strong>Operações</strong><br />
+              <span class="muted">Soma, desconto, média e margem.</span>
+            </div>
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  </body>
+</html>

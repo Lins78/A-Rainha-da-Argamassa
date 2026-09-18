@@ -1,0 +1,6 @@
+def registrar_venda(produto, quantidade):
+    if produto.estoque >= quantidade:
+        produto.estoque -= quantidade
+        return True
+    else:
+        return False
