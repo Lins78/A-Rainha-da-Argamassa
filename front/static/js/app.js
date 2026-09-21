@@ -3,6 +3,7 @@ const resultado = document.getElementById('resultado');
 const tipoOperacao = document.getElementById('tipoOperacao');
 const submitBtn = document.getElementById('submitBtn');
 const resetBtn = document.getElementById('resetBtn');
+const currentAction = document.getElementById('currentAction');
 
 const campoTemplates = {
   produto: [
@@ -91,9 +92,11 @@ function renderFields() {
   const operation = tipoOperacao.value;
   const fields = campoTemplates[operation] || [];
   formContainer.innerHTML = '';
+  currentAction.textContent = tipoOperacao.options[tipoOperacao.selectedIndex].text;
 
   fields.forEach((field) => {
     const wrapper = document.createElement('div');
+    wrapper.className = 'field-group';
     wrapper.innerHTML = `
       <label for="${field.name}">${field.label}</label>
       <input id="${field.name}" type="${field.type}" name="${field.name}" step="${field.step || '1'}" placeholder="${field.placeholder || ''}" />
@@ -146,6 +149,12 @@ function executar() {
   const operation = tipoOperacao.value;
   const apiKey = window.API_KEY || 'demo-api-key';
   const payload = buildPayload(operation);
+
+  submitBtn.disabled = true;
+  submitBtn.classList.add('loading');
+  submitBtn.querySelector('span').textContent = 'Processando...';
+  resultado.className = 'result result-loading';
+  resultado.textContent = 'A operação está sendo processada.';
 
   const urlMap = {
     produto: '/produtos',
@@ -205,10 +214,10 @@ function executar() {
         }
       })
       .then(({ ok, data }) => {
-        resultado.textContent = ok ? JSON.stringify(data, null, 2) : JSON.stringify(data, null, 2);
+        mostrarResultado(ok, data);
       })
       .catch((error) => {
-        resultado.textContent = 'Erro: ' + error.message;
+        mostrarResultado(false, { msg: error.message });
       });
     return;
   }
@@ -232,11 +241,19 @@ function executar() {
       }
     })
     .then(({ ok, data }) => {
-      resultado.textContent = ok ? JSON.stringify(data, null, 2) : JSON.stringify(data, null, 2);
+      mostrarResultado(ok, data);
     })
     .catch((error) => {
-      resultado.textContent = 'Erro: ' + error.message;
+      mostrarResultado(false, { msg: error.message });
     });
+}
+
+function mostrarResultado(ok, data) {
+  submitBtn.disabled = false;
+  submitBtn.classList.remove('loading');
+  submitBtn.querySelector('span').textContent = 'Executar operação';
+  resultado.className = ok ? 'result result-success' : 'result result-error';
+  resultado.textContent = (ok ? 'Operação concluída\n\n' : 'Não foi possível concluir\n\n') + JSON.stringify(data, null, 2);
 }
 
 tipoOperacao.addEventListener('change', () => {
